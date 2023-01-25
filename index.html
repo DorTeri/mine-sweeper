@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mine Sweeper</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body onload="onInit()">
+    <h1>Mines Sweeper</h1>
+    <div class="levels">
+        <button class="btn-level easy" onclick="restartGame(4 , 2)">Easy<span>🙄</span></button>
+        <button class="btn-level medium" onclick="restartGame(8 , 14)">Medium<span>😏</span></button>
+        <button class="btn-level extreme" onclick="restartGame(12 , 32)">Expert<span>🤣</span></button>
+    </div>
+        <table class="board">
+            <h2 class="lives"><span>❤❤❤</span></h2>
+            <button class="btn-restart" onclick="restartGame(4 , 2)">😀</button>
+            <tbody></tbody>
+        </table>
+        <div class="hints">
+            <button class="hint0" onclick="hintClick(0)">💡</button>
+            <button class="hint1" onclick="hintClick(1)">💡</button>
+            <button class="hint2" onclick="hintClick(2)">💡</button>
+        </div>
+
+    <footer>Game built by: ©Dor Tayari</footer>
+
+    <script src="js/util.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/clicks.js"></script>
+</body>
+
+</html>
