@@ -9,6 +9,7 @@ var gGame
 var gBoard
 var gWin = false
 var gTimerInterval
+var gBestScoreMode = false
 
 var gLevel = {
     SIZE: 4,
@@ -24,22 +25,34 @@ function onInit() {
         secsPassed: 0,
         lives: 3,
         safeCount: 3,
-        manualMode: false , 
+        manualMode: false,
+        megaHint: false,
+        exterminator: 1,
+        flagCount: gLevel.MINES
     }
     gBoard = buildBoard()
     renderBoard(gBoard, '.board')
+    showBestScore()
 }
 
 // Restarting the game with smiley btn or a level select
 function onRestartGame(size, minesCount) {
+    if (gBestScoreMode) onBestScore()
     gLevel = {
         SIZE: size,
         MINES: minesCount
     }
     clearGame()
-    document.querySelector('.timer span').innerText = '0.000'
     onInit()
     clearManualMode()
+    restartShownCounts()
+    document.querySelector('.flag-count').innerText = gGame.flagCount
+}
+
+function restartShownCounts() {
+    document.querySelector('.safe span').innerText = gGame.safeCount
+    document.querySelector('.mega-hint span').innerText = '1'
+    document.querySelector('.timer span').innerText = '0.000'
 }
 
 // Buliding the board and rendering it with nothing inside
@@ -107,13 +120,26 @@ function negsCount(board, cellI, cellJ) {
 
 // Adding mines after the first click
 function addMines(currLocation) {
-    var emptyLocations = getEmptyLocations(gBoard)
+    var emptyLocations = getEmptyLocations(gBoard, currLocation)
     for (let i = 0; i < gLevel.MINES; i++) {
         var emptyLocationIdx = getRandomInt(0, emptyLocations.length)
         var emptyLocation = emptyLocations.splice(emptyLocationIdx, 1)
         if (emptyLocation[0].i === currLocation.i && emptyLocation[0].j === currLocation.j) i--
         else gBoard[emptyLocation[0].i][emptyLocation[0].j].isMine = true
     }
+}
+
+function getEmptyLocations(board, currLocation) {
+    var emptyLocations = []
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (i < currLocation.i - 1 || j < currLocation.j - 1
+                || i > currLocation.i + 1 || j > currLocation.j + 1) {
+                emptyLocations.push({ i: i, j: j })
+            }
+        }
+    }
+    return emptyLocations
 }
 
 // Changing smiley with switch for every situation
@@ -142,22 +168,21 @@ function changeSmiley(smiley) {
 function checkGameOver() {
     gGame.shownCount = checkShownCount(gBoard)
     var cellsCount = gLevel.SIZE * gLevel.SIZE - gLevel.MINES
-    console.log('gGame.shownCount', gGame.shownCount)
-    console.log('gGame.markedCount', gGame.markedCount)
-    console.log('gLevel.mines', gLevel.MINES)
-    console.log('cellsCount', cellsCount)
     if (!gGame.lives) {
         showAllMines()
         clearInterval(gTimerInterval)
         gWin = false
         gGame.isOn = false
         changeSmiley('sad')
+        makeSound('lost')
     }
     else if (gGame.shownCount === cellsCount && gGame.markedCount === gLevel.MINES) {
         clearInterval(gTimerInterval)
+        handleBestScore(gGame.secsPassed)
         gWin = true
         gGame.isOn = false
         changeSmiley('win')
+        makeSound('win')
     }
 }
 
@@ -192,6 +217,7 @@ function clearGame() {
     clearHints()
     clearLives()
     changeSmiley('start')
+    gBestScoreMode = false
 }
 
 // Adding back Lives when restart
@@ -208,6 +234,7 @@ function timer() {
     gTimerInterval = setInterval(function () {
         var elapsedTime = Date.now() - startTime;
         document.querySelector('.timer span').innerHTML = (elapsedTime / 1000).toFixed(3);
+        gGame.secsPassed = (elapsedTime / 1000).toFixed(3);
     }, 37);
 }
 
@@ -232,4 +259,62 @@ function clearManualMode() {
     gManualMinesCount = gLevel.MINES
     showMinesLeft()
     document.querySelector('.manual-mode').classList.remove('clicked')
+}
+
+// Local storage best score
+function handleBestScore(score) {
+    switch (gLevel.SIZE) {
+        case 4:
+            handleStorage('easy' , score)
+            break
+        case 8:
+            handleStorage('medium' , score)
+            break
+        case 12:
+            handleStorage('expert' , score)
+            break
+    }
+}
+
+function handleStorage(level , score) {
+    if (!localStorage.getItem(`${level}`)) localStorage.setItem(`${level}`, score)
+    else if (score < localStorage.getItem(`'${level}'`)) localStorage.setItem(`${level}`, score)
+    document.querySelector(`p.${level} span`).innerText = localStorage.getItem(`${level}`)
+}
+
+function showBestScore() {
+    document.querySelector('p.easy span').innerText = localStorage.getItem('easy')
+    document.querySelector('p.medium span').innerText = localStorage.getItem('medium')
+    document.querySelector('p.expert span').innerText = localStorage.getItem('expert')
+}
+
+function makeSound(sound) {
+    var win = new Audio('sounds/win.wav')
+    var mine = new Audio('sounds/mine.wav')
+    var lost = new Audio('sounds/lost.wav')
+    var left = new Audio('sounds/area-left.mp3')
+    var right = new Audio('sounds/area-right.mp3')
+    var dog = new Audio('sounds/dog.mp3')
+    switch (sound) {
+        case 'win':
+            win.play()
+            break;
+        case 'mine':
+            mine.play()
+            break;
+        case 'lost':
+            lost.play()
+            break;
+        case 'left':
+            left.play()
+            break;
+        case 'right':
+            right.play()
+            break;
+        case 'dog':
+            dog.play()
+            break;
+        default:
+            break;
+    }
 }

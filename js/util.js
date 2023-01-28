@@ -23,16 +23,6 @@ function renderCell(location, value) {
     elCell.innerText = value
 }
 
-function getEmptyLocations(board) {
-    var emptyPoss = []
-    for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
-            if (board[i][j] !== MINE) emptyPoss.push({ i, j })
-        }
-    }
-    return emptyPoss
-}
-
 function copyMat(mat) {
     var newMat = []
     for (var i = 0; i < mat.length; i++) {

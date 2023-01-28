@@ -17,13 +17,24 @@
         <button class="btn-level medium" onclick="onRestartGame(8 , 14)">Medium<span>😏</span></button>
         <button class="btn-level extreme" onclick="onRestartGame(12 , 32)">Expert<span>🤣</span></button>
     </div>
-    <div class="phone">
-        <button class="btn-dark" onclick="onDarkMode()">dark mode</button>
-        <button class="safe" onclick="onSafeClick(this)"><span>3</span> safe clicks</button>
-        <button class="manual-mode" onclick="onManualMode(this)">Manual mode<br><span hidden>2</span></button>
-        <h3 class="timer"><span>0.000</span>s</h3>
-        <div class="camera"></div>
-        <h2 class="lives">
+    <br>
+    <button class="mega-hint" onclick="onMegaHint(this)"><span>1</span>Mega hint</button>
+    <button class="best-score" onclick="onBestScore()">Best score</button>
+    <div class="phone-game">
+        <button class="btn-dark hide" onclick="onDarkMode()">dark mode</button>
+        <div hidden class="score">
+            <p>Best scores</p>
+            <hr>
+            <p class="easy">Easy: <span></span></p>
+            <p class="medium">Medium: <span></span></p>
+            <p class="expert">Expert: <span></span></p>
+        </div>
+        <button class="safe hide" onclick="onSafeClick(this)"><span>3</span> safe clicks</button>
+        <img onclick="onExterminator()" class="exterminator hide" src="img/dog.png">
+        <button class="manual-mode hide" onclick="onManualMode(this)">Manual mode<br><span hidden>2</span></button>
+        <h3 class="timer hide"><span>0.000</span>s <span class="flag"><span class="flag-count">2</span>🚩</span></h3>
+        <div class="camera hide"></div>
+        <h2 class="lives hide">
             <p class="live1">❤</p>
             <p class="live2">❤</p>
             <p class="live3">❤</p>
@@ -44,6 +55,7 @@
 
     <script src="js/util.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/features.js"></script>
     <script src="js/clicks.js"></script>
 </body>
 

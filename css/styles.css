@@ -35,7 +35,7 @@ h3 {
 }
 
 .levels button span {
-    display: none;
+    opacity: 0;
 }
 
 .levels button:hover {
@@ -43,13 +43,39 @@ h3 {
 }
 
 .levels button:hover span {
-    cursor: pointer;
-    display: inline;
+    opacity: 1;
+    transition: 0.7s;
 }
 
-.phone {
+.best-score , 
+.mega-hint {
+    margin-left: 2px;
+    margin-right: 2px;
+    background-color: black;
+    color: white;
+    width: 90px;
+    height: 25px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.best-score:hover ,
+.mega-hint:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.score p{
+    margin-bottom: 2px;
+}
+
+hr {
+    border: 2px solid rgb(255, 200, 61);
+}
+
+.phone-game {
     background-color: rgba(123, 229, 255, 0.596);
-    padding: 30px;
+    padding: 30px 35px;
     padding-top: 0;
     padding-bottom: 0;
     border: 6px solid black;
@@ -83,7 +109,7 @@ h3 {
 
 .safe {
     position: relative;
-    right: 20%;
+    right: 10%;
     width: 50px;
 }
 
@@ -112,12 +138,30 @@ h3 {
 
 .manual-mode {
     position: relative;
-    left: 20%;
+    left: 10%;
     width: 60px;
 }
 
 .manual-mode span {
     line-height: 2.5;
+}
+
+.exterminator {
+    border-radius: 50%;
+    height: 50px;
+    width: 100px;
+}
+
+.exterminator:hover {
+    transform: rotate(-20deg);
+    cursor: pointer;
+    transition: 0.5s;
+
+}
+
+.flag {
+    font-size: 20px;
+    padding-left: 40px;
 }
 
 .camera {
@@ -242,6 +286,11 @@ table {
 .dark-background {
     background-color: white;
     color: black;
+}
+
+.mega-hint1 {
+    background-color: rgb(0, 255, 42);
+    box-shadow: 5px 0px 0px rgb(255, 200, 61);
 }
 
 footer {
